@@ -42,3 +42,12 @@ find_package(glm REQUIRED)
 add_executable(glm-sample glm_sample.cpp)
 target_link_libraries(glm-sample PRIVATE glm)
 set_target_properties(glm-sample PROPERTIES FOLDER "Samples")
+
+# dxc
+find_package(dxc REQUIRED)
+add_executable(dxc-sample dxc_sample.cpp)
+target_link_libraries(dxc-sample PRIVATE dxc)
+set_target_properties(dxc-sample PROPERTIES FOLDER "Samples")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  target_compile_options(dxc-sample PRIVATE -fms-extensions)
+endif()

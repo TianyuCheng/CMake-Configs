@@ -25,39 +25,13 @@ if(NOT dxc_FOUND)
   endif()
 endif()
 
-# # fallback solution: build dxc using FetchContent
-# # ===================================================
-# if(NOT dxc_FOUND)
-#   include(FetchContent)
-#
-#   # add ms extension for clang to build DXC
-#   if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-#     add_compile_options(-fms-extensions)
-#   endif()
-#
-#   # define external project
-#   FetchContent_Declare(
-#     dxc
-#     GIT_REPOSITORY https://github.com/microsoft/DirectXShaderCompiler.git
-#     GIT_TAG        v1.8.2407
-#   )
-#
-#   # get properties
-#   FetchContent_GetProperties(dxc)
-#
-#   # populate dxc
-#   if(NOT dxc_POPULATED)
-#     FetchContent_Populate(dxc)
-#   endif()
-#
-#   # build dxc when needed
-#   include(${dxc_SOURCE_DIR}/cmake/caches/PredefinedParams.cmake)
-#   FetchContent_MakeAvailable(dxc)
-#
-#   # dxc alias
-#   # add_library(dxc ALIAS dxcompiler)
-#   # set_target_properties(dxc PROPERTIES FOLDER "Vendors")
-#
-#   # mark dxc as found
-#   set(dxc_FOUND TRUE)
-# endif()
+# fallback solution: find dxc from external package manager
+# DirectXShadercompiler is a relatively big piece of software,
+# therefore we would want to avoid building it ourselves.
+# ===================================================
+if(NOT dxc_FOUND)
+  find_package(directx-dxc CONFIG REQUIRED)
+  add_library(dxc ALIAS Microsoft::DirectXShaderCompiler)
+  set(dxc_FOUND TRUE)
+  message(STATUS "Found dxc from external package manager!")
+endif()

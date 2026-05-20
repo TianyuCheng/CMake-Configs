@@ -19,3 +19,6 @@ FetchContent_MakeAvailable(cxxopts)
 
 # mark cxxopts as found
 set(cxxopts_FOUND TRUE)
+
+# move cxxopts under folder
+set_target_properties(cxxopts PROPERTIES FOLDER "Vendors")

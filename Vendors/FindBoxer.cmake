@@ -10,16 +10,41 @@ FetchContent_Declare(
 # get properties
 FetchContent_GetProperties(boxer)
 
-# build boxer when needed
-set(BOXER_BUILD_EXAMPLES  OFF CACHE BOOL "" FORCE)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(boxer)
+# populate boxer
+if(NOT boxer_POPULATED)
+  FetchContent_Populate(boxer)
+endif()
+
+# gather source files (based on operating system)
+set(BOXER_SOURCES "")
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+  list(APPEND BOXER_SOURCES "${boxer_SOURCE_DIR}/src/boxer_win.cpp")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  list(APPEND BOXER_SOURCES "${boxer_SOURCE_DIR}/src/boxer_linux.cpp")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+  list(APPEND BOXER_SOURCES "${boxer_SOURCE_DIR}/src/boxer_mac.mm")
+else()
+  message(FATAL_ERROR "Boxer does not support unknown OS!")
+endif()
+
+# add boxer target
+if(NOT TARGET boxer)
+  add_library(boxer STATIC ${BOXER_SOURCES})
+  target_include_directories(boxer PUBLIC
+    $<BUILD_INTERFACE:${boxer_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  )
+  if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    find_library(COCOA_LIBRARY Cocoa)
+    target_link_libraries(boxer PRIVATE ${COCOA_LIBRARY})
+  endif()
+endif()
 
 # mark boxer as found
 set(boxer_FOUND TRUE)
 
-# Re-export target with namespace
-add_library(boxer ALIAS Boxer)
+# re-export target with namespace
+add_library(boxer::boxer ALIAS boxer)
 
-# move Boxer under folder
-set_target_properties(Boxer PROPERTIES FOLDER "Vendors")
+# move boxer under folder
+set_target_properties(boxer PROPERTIES FOLDER "Vendors")

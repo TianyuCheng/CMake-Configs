@@ -1,4 +1,6 @@
-cmake_policy(VERSION 3.6)
+# enable natvis support
+set(ENTT_INCLUDE_NATVIS ON)
+
 include(FetchContent)
 
 # define external project
@@ -11,19 +13,14 @@ FetchContent_Declare(
 # get properties
 FetchContent_GetProperties(entt)
 
-# populate entt when needed
-if(NOT entt_POPULATED)
-    FetchContent_Populate(entt)
-endif()
-
-# add stb target (if not done so)
-if(NOT TARGET entt)
-  add_library(entt INTERFACE)
-  target_include_directories(entt INTERFACE ${entt_SOURCE_DIR}/single_include)
-endif()
+# build entt when needed (enable install)
+set(ENTT_BUILD_TESTBED OFF CACHE BOOL "" FORCE)
+set(ENTT_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(ENTT_INSTALL       ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(entt)
 
 # mark stb as found
 set(entt_FOUND TRUE)
 
 # put stb under folder
-set_target_properties(entt PROPERTIES FOLDER "Vendors")
+set_target_properties(EnTT PROPERTIES FOLDER "Vendors")

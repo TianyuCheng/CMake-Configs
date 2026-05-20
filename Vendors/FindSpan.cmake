@@ -12,7 +12,7 @@ FetchContent_GetProperties(span)
 
 # populate span when needed
 if(NOT span_POPULATED)
-    FetchContent_Populate(span)
+  FetchContent_Populate(span)
 endif()
 
 # create the single header library

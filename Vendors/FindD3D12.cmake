@@ -1,3 +1,5 @@
+# https://raw.githubusercontent.com/microsoft/DirectXShaderCompiler/refs/heads/main/cmake/modules/FindD3D12.cmake
+
 # Find the Win10 SDK path.
 if ("$ENV{WIN10_SDK_PATH}$ENV{WIN10_SDK_VERSION}" STREQUAL "" )
   get_filename_component(WIN10_SDK_PATH "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Kits\\Installed Roots;KitsRoot10]" ABSOLUTE CACHE)

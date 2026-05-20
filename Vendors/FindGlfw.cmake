@@ -15,12 +15,13 @@ set(GLFW_INSTALL        OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_DOCS     OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-if(NOT TARGET glfw)
-  FetchContent_MakeAvailable(glfw)
-endif()
+FetchContent_MakeAvailable(glfw)
 
 # mark glfw as found
 set(glfw_FOUND TRUE)
+
+# re-export target with namespace
+add_library(glfw::glfw ALIAS glfw)
 
 # move to different folder
 set_target_properties(glfw PROPERTIES FOLDER "Vendors")
